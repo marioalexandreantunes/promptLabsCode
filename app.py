@@ -85,22 +85,6 @@ def check_login(username, password):
         expiry_str = expiry_time.isoformat()
         
         # Set cookies with unique keys and longer max_age
-        '''
-        cookie_manager.set(
-            cookie="session_token", 
-            val=session_id,
-            expires_at=expiry_time,
-            key="set_token",
-            path="/"  # Add path parameter
-        )
-        cookie_manager.set(
-            cookie="session_expiry", 
-            val=expiry_str,
-            expires_at=expiry_time,
-            key="set_expiry",
-            path="/"  # Add path parameter
-        )
-        '''
         cookie_manager.set(
             "session_token", 
             session_id,
