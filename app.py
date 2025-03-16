@@ -5,7 +5,7 @@ import uuid
 from dotenv import load_dotenv
 from groq_ai import re_prompt
 from sanitize import sanitize_prompt
-from streamlit_cookies_controller import CookieController
+import extra_streamlit_components as stx
 from datetime import datetime, timedelta
 
 load_dotenv() 
@@ -32,6 +32,10 @@ hide_settings_button = """
 
 st.markdown(hide_settings_button, unsafe_allow_html=True)
 
+if DEBUG:
+    print("======================= root ============================")
+    print(f"Debug - st.session_state: {st.session_state}")
+
 # Initialize session variables
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
@@ -40,22 +44,24 @@ if "logged_in" not in st.session_state:
 # Get all cookies first
 #st.session_state.cookie_manager = stx.CookieManager()
 
-st.session_state.cookie_manager = CookieController()
-cookie_manager = st.session_state.cookie_manager
-all_cookies = cookie_manager.getAll()
 
+st.session_state.cookie_manager = stx.CookieManager()
+cookie_manager = st.session_state.cookie_manager
+all_cookies = cookie_manager.get_all()
 
 # Check for session in cookies using the all_cookies dictionary
-session_token = all_cookies.get("session_token")
 session_expiry = all_cookies.get("session_expiry")
+session_id = all_cookies.get("session_id")
 
 if DEBUG:
     print("======================= root ============================")
-    print(f"Debug - Token: {session_token}")
-    print(f"Debug - Expiry: {session_expiry}")
+    print(f"Debug - All Cookies: {all_cookies}")
+    print(f"Debug - session_expiry: {session_expiry}")
+    print(f"Debug - session_id: {session_id}")
 
-if session_token and session_expiry:
+if session_expiry and session_id:
     try:
+        print()
         expiry = datetime.fromisoformat(session_expiry)
         if DEBUG:
             print(f"Debug - Current time: {datetime.now()}")
@@ -85,21 +91,34 @@ def check_login(username, password):
         expiry_str = expiry_time.isoformat()
         
         # Set cookies with unique keys and longer max_age
-        cookie_manager.set(
-            "session_token", 
-            session_id,
-        )
-        cookie_manager.set(
-            "session_expiry", 
-            expiry_str
-        )
+        try:
+            cookie_manager.set(
+                cookie="session_expiry", 
+                val=expiry_str,
+                key='session_expiry',
+                path="/",
+                expires_at=expiry_time  # Set explicit expiration time
+            )
+            cookie_manager.set(
+                cookie="session_id",
+                val=session_id,
+                key='session_id',
+                path="/",
+                expires_at=expiry_time  # Set explicit expiration time
+            )
+            
+        except Exception as e:
+            st.error(f"Failed to set session cookie: {e}")
+            return
         
         # Make sure to set the session state before rerunning
         st.session_state.logged_in = True
         if DEBUG:
             print("Login successful, cookie set")
-            print(f"Debug - Token: {cookie_manager.get('session_token')}")
-            print(f"Debug - Expiry: {cookie_manager.get('session_expiry')}")
+            print(f"Debug - session_expiry: {cookie_manager.get('session_expiry')}")
+            print(f"Debug - session_id: {cookie_manager.get('session_id')}")
+            print(f"Debug - st.session_state.session_id: {st.session_state.session_id}")
+            print(f"Debug - st.session_state.session_expiry: {st.session_state.session_expiry}")
         
         # Add a small delay before rerunning to ensure cookies are set
         st.rerun()
@@ -124,27 +143,20 @@ else:
     if st.sidebar.button("Logout"):
         # Get all cookies to check existence
 
-        session_token = all_cookies.get("session_token")
         session_expiry = all_cookies.get("session_expiry")
 
         if DEBUG:
             print("======================= logout ============================")
             print(f"Debug - All Cookies before deletion: {all_cookies}")
-            print(f"Debug - Token before deletion: {session_token}")
             print(f"Debug - Expiry before deletion: {session_expiry}")
         # Delete cookies if they exist
-        #cookie_manager.delete("session_token", key="delete_token")
-        #cookie_manager.delete("session_expiry", key="delete_expiry")
-        cookie_manager.remove('session_token')
-        cookie_manager.remove('session_expiry')
-        #cookie_manager.delete("session_expiry")
+        cookie_manager.delete('session_expiry')
             
         # Clear session state and set logged_in to False
         # st.session_state.clear()
         st.session_state.logged_in = False
 
         if DEBUG:
-            print(f"Debug - All Cookies after deletion: {cookie_manager.get('session_token')}")
             print(f"Debug - All Cookies after deletion: {cookie_manager.get('session_expiry')}")
 
         st.session_state.clear()
