@@ -86,7 +86,11 @@ This application can be deployed using Coolify, a self-hostable PaaS solution:
 ├── groq_ai.py          # Groq API integration
 ├── requirements.txt    # Python dependencies
 ├── Dockerfile          # Container configuration
+├── TODO.md             # Development tasks and roadmap
+├── sanitize.py         # Data sanitization utilities
 └── .env                # Environment variables (not tracked in git)
+
+![Project Structure](https://i.imgur.com/xFxQmgD.png)
 ```
 
 ## Best Practices
