@@ -89,8 +89,6 @@ This application can be deployed using Coolify, a self-hostable PaaS solution:
 ├── TODO.md             # Development tasks and roadmap
 ├── sanitize.py         # Data sanitization utilities
 └── .env                # Environment variables (not tracked in git)
-
-![Project Structure](https://i.imgur.com/xFxQmgD.png)
 ```
 
 ## Best Practices
@@ -103,6 +101,10 @@ This project follows these Python best practices:
 - Clean code structure with separation of concerns
 - Proper error handling and input validation
 - Docker containerization for consistent deployment
+
+## Image
+
+![Project Structure](https://i.imgur.com/xFxQmgD.png)
 
 ## License
 
