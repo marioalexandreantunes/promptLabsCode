@@ -10,7 +10,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-
 # Hide the Settings button with CSS
 hide_settings_button = """
     <style>
@@ -21,7 +20,6 @@ hide_settings_button = """
 """
 
 st.markdown(hide_settings_button, unsafe_allow_html=True)
-
 
 # Main page header (keeping Portuguese for UI elements)
 st.title("Aplicação de Criação de Prompts")
@@ -39,8 +37,11 @@ with st.sidebar:
     st.write(
         "1. Preencha as quatro secções no painel principal\n"
         "2. Reveja o seu prompt gerado\n"
-        "3. Copie e utilize com o seu modelo de IA favorito"
+        "3. Verifique o prompt melhorado\n"
+        "4. Copie e utilize com o seu modelo de IA favorito"
     )
+    st.write("---")
+    st.markdown("<a href='https://www.mariocodelabs.com/'><img src='https://i.imgur.com/Ebf0JAJ.png' width='250'></a>", unsafe_allow_html=True)
 
 # Main content area - Prompt components section
 st.write("## Componentes do Prompt")
@@ -55,10 +56,10 @@ with col1:
         placeholder="Defina o objetivo do agente de IA\nExemplo: Gera um resumo de 100 palavras sobre blockchain.",
         height=150
     )
-    
-    return_format = st.text_area(
-        "Formato de Retorno", 
-        placeholder="Defina o formato para os dados retornados\nExemplo: Cria uma lista com os 5 principais desafios do blockchain.",
+
+    context_dump = st.text_area(
+        "Contexto", 
+        placeholder="Defina contexto adicional ou exemplos\nExemplo: Explica blockchain para um iniciante sem termos técnicos complicados.",
         height=150
     )
 
@@ -69,15 +70,17 @@ with col2:
         placeholder="Defina quaisquer avisos ou restrições\nExemplo: O texto não pode ter mais de 200 palavras.",
         height=150
     )
-    
-    context_dump = st.text_area(
-        "Contexto", 
-        placeholder="Defina contexto adicional ou exemplos\nExemplo: Explica blockchain para um iniciante sem termos técnicos complicados.",
+
+    return_format = st.text_area(
+        "Formato de Retorno", 
+        placeholder="Defina o formato para os dados retornados\nExemplo: Cria uma lista com os 5 principais desafios do blockchain.",
         height=150
     )
+    
+    
 
 # Button to generate the prompt
-generate_button = st.button("Gerar Prompt", type="primary")
+generate_button = st.button("Gerar Prompt", type="primary", icon="👽")
 
 # Display section for the generated prompt
 st.write("---")
@@ -127,7 +130,4 @@ else:
 # Add a footer with logo and link
 st.markdown("---")
 
-# Pure markdown footer with HTML img tag for size control
-col1, col2, col3, col4, col5 = st.columns([1, 1, 2, 1, 1])
-with col3:
-    st.markdown("<a href='https://www.mariocodelabs.com/'><img src='https://i.imgur.com/Ebf0JAJ.png' width='300'></a>", unsafe_allow_html=True)
+st.markdown("marioCodeLabs.com © 2025")
