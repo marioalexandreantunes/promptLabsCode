@@ -53,10 +53,20 @@ pip install -r requirements.txt
 
 ## Configuration
 
-Create a `.env` file in the root directory with your Groq API key:
+To configure the application, create a `.env` file in the root directory and set the following environment variables:
+
+- **GROQ_API_KEY**: Your Groq API key for accessing the Groq API.
+- **DEBUG**: Set to `True` for development mode or `False` for production mode.
+- **ADMIN_USERNAME**: Username for the admin user (optional).
+- **ADMIN_PASSWORD**: Password for the admin user (optional).
+
+Example:
 
 ```
 GROQ_API_KEY=your_groq_api_key_here
+DEBUG=True
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin_password
 ```
 
 ## Running the Application
